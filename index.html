@@ -3,30 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>By_Selim Akademik Makale Biçimlendirici</title>
-  <link rel="stylesheet" href="style.css">
+  <title>📄 Akademik Makale Biçimlendirici</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
+  </style>
 </head>
-<body class="p-6 bg-gray-50 min-h-screen">
-  <h1 class="text-3xl font-bold mb-4 text-center">📄 Akademik Makale Biçimlendirici</h1>
+<body class="p-6">
+  <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl p-8">
+    <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">📘 Akademik Makale Biçimlendirici</h1>
 
-  <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl p-6">
     <label class="block font-semibold mb-2">Word Dosyasını Yükle:</label>
-    <input type="file" id="fileInput" accept=".docx" class="mb-4 w-full border p-2 rounded">
+    <input type="file" id="fileInput" accept=".docx" class="mb-6 w-full border p-3 rounded-md">
 
-    <div class="grid grid-cols-2 gap-4 mb-4">
+    <div class="grid grid-cols-2 gap-4 mb-6">
       <div>
         <label class="font-semibold">Kenar Boşluğu (cm):</label>
-        <input type="number" id="margin" step="0.1" value="2.5" class="w-full border p-2 rounded">
+        <input type="number" id="margin" step="0.1" value="2.5" class="w-full border p-2 rounded-md">
       </div>
 
       <div>
         <label class="font-semibold">Satır Aralığı:</label>
-        <input type="number" id="lineSpacing" step="0.1" value="1.15" class="w-full border p-2 rounded">
+        <input type="number" id="lineSpacing" step="0.1" value="1.15" class="w-full border p-2 rounded-md">
       </div>
 
       <div>
         <label class="font-semibold">Yazı Tipi:</label>
-        <select id="font" class="w-full border p-2 rounded">
+        <select id="font" class="w-full border p-2 rounded-md">
           <option>Times New Roman</option>
           <option>Arial</option>
           <option>Calibri</option>
@@ -36,12 +44,12 @@
 
       <div>
         <label class="font-semibold">Yazı Boyutu (pt):</label>
-        <input type="number" id="fontSize" value="12" class="w-full border p-2 rounded">
+        <input type="number" id="fontSize" value="12" class="w-full border p-2 rounded-md">
       </div>
 
       <div>
         <label class="font-semibold">Sayfa Numarası:</label>
-        <select id="pageNumbers" class="w-full border p-2 rounded">
+        <select id="pageNumbers" class="w-full border p-2 rounded-md">
           <option value="none">Yok</option>
           <option value="top">Üstte</option>
           <option value="bottom">Altta</option>
@@ -50,7 +58,7 @@
 
       <div>
         <label class="font-semibold">Biçim Şablonu:</label>
-        <select id="template" class="w-full border p-2 rounded">
+        <select id="template" class="w-full border p-2 rounded-md">
           <option value="custom">Özel</option>
           <option value="apa">APA</option>
           <option value="mla">MLA</option>
@@ -59,11 +67,15 @@
       </div>
     </div>
 
-    <button id="processBtn" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 w-full">Biçimlendir ve İndir</button>
+    <button id="processBtn" class="bg-blue-600 text-white font-semibold py-3 px-4 rounded-md hover:bg-blue-700 w-full transition">
+      Biçimlendir ve İndir
+    </button>
 
-    <div id="previewContainer" class="mt-6 hidden">
-      <h2 class="text-xl font-semibold mb-2">🧾 Ön İzleme</h2>
-      <div id="preview" class="border rounded p-4 max-h-96 overflow-y-auto bg-gray-100 text-sm"></div>
+    <div id="status" class="text-center text-gray-600 mt-4"></div>
+
+    <div id="previewContainer" class="mt-8 hidden">
+      <h2 class="text-xl font-semibold mb-3 text-blue-700">🧾 Ön İzleme</h2>
+      <div id="preview" class="border rounded-md p-4 max-h-96 overflow-y-auto bg-gray-50 text-sm leading-relaxed"></div>
     </div>
   </div>
 
