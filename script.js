@@ -10,34 +10,55 @@ document.getElementById("processBtn").addEventListener("click", async function()
   const font = document.getElementById("font").value;
   const fontSize = parseInt(document.getElementById("fontSize").value);
   const lineSpacing = parseFloat(document.getElementById("lineSpacing").value);
+  const pageNumbers = document.getElementById("pageNumbers").value;
+  const template = document.getElementById("template").value;
 
-  // Word içeriğini HTML'e dönüştür
+  // Dosyayı oku
   const arrayBuffer = await file.arrayBuffer();
   const result = await mammoth.convertToHtml({ arrayBuffer });
-  const content = result.value; // HTML formatında içerik
+  const content = result.value;
+  document.getElementById("previewContainer").classList.remove("hidden");
+  document.getElementById("preview").innerHTML = content;
 
-  // Şimdi yeni docx dosyası oluştur
-  const { Document, Packer, Paragraph } = docx;
+  const { Document, Packer, Paragraph, TextRun, Header, Footer } = docx;
 
-  // HTML içeriğini paragraflara dönüştür
   const paragraphs = content
-    .replace(/<[^>]+>/g, "\n") // HTML etiketlerini temizle
+    .replace(/<[^>]+>/g, "\n")
     .split("\n")
     .filter(p => p.trim().length > 0)
-    .map(p => new Paragraph({
-      spacing: { line: lineSpacing * 240 },
-      children: [
-        new docx.TextRun({
-          text: p.trim(),
-          font: font,
-          size: fontSize * 2,
-        })
-      ],
-    }));
+    .map(p => {
+      let style = {};
+      if (p.toLowerCase().includes("kaynakça") || p.toLowerCase().includes("references")) {
+        style = { bold: true, underline: {} };
+      }
+      return new Paragraph({
+        spacing: { line: lineSpacing * 240 },
+        children: [
+          new TextRun({
+            text: p.trim(),
+            font: font,
+            size: fontSize * 2,
+            ...style
+          })
+        ]
+      });
+    });
 
-  // Yeni Word dokümanını oluştur
+  let header, footer;
+  if (pageNumbers === "top") {
+    header = new Header({
+      children: [new Paragraph({ text: "Sayfa: ", alignment: docx.AlignmentType.RIGHT })],
+    });
+  } else if (pageNumbers === "bottom") {
+    footer = new Footer({
+      children: [new Paragraph({ text: "Sayfa: ", alignment: docx.AlignmentType.CENTER })],
+    });
+  }
+
   const doc = new Document({
     sections: [{
+      headers: { default: header },
+      footers: { default: footer },
       properties: {
         page: {
           margin: {
@@ -52,7 +73,6 @@ document.getElementById("processBtn").addEventListener("click", async function()
     }],
   });
 
-  // Dosyayı indir
   const blob = await Packer.toBlob(doc);
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
