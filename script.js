@@ -11,47 +11,53 @@ document.getElementById("processBtn").addEventListener("click", async function()
   const fontSize = parseInt(document.getElementById("fontSize").value);
   const lineSpacing = parseFloat(document.getElementById("lineSpacing").value);
 
-  const reader = new FileReader();
-  reader.onload = async function(e) {
-    const arrayBuffer = e.target.result;
+  // Word içeriğini HTML'e dönüştür
+  const arrayBuffer = await file.arrayBuffer();
+  const result = await mammoth.convertToHtml({ arrayBuffer });
+  const content = result.value; // HTML formatında içerik
 
-    const { Document, Packer, Paragraph, TextRun } = docx;
+  // Şimdi yeni docx dosyası oluştur
+  const { Document, Packer, Paragraph } = docx;
 
-    // Yeni doküman oluştur
-    const doc = new Document({
-      sections: [{
-        properties: {
-          page: {
-            margin: {
-              top: margin * 567, // cm → twips
-              bottom: margin * 567,
-              left: margin * 567,
-              right: margin * 567,
-            },
+  // HTML içeriğini paragraflara dönüştür
+  const paragraphs = content
+    .replace(/<[^>]+>/g, "\n") // HTML etiketlerini temizle
+    .split("\n")
+    .filter(p => p.trim().length > 0)
+    .map(p => new Paragraph({
+      spacing: { line: lineSpacing * 240 },
+      children: [
+        new docx.TextRun({
+          text: p.trim(),
+          font: font,
+          size: fontSize * 2,
+        })
+      ],
+    }));
+
+  // Yeni Word dokümanını oluştur
+  const doc = new Document({
+    sections: [{
+      properties: {
+        page: {
+          margin: {
+            top: margin * 567,
+            bottom: margin * 567,
+            left: margin * 567,
+            right: margin * 567,
           },
         },
-        children: [
-          new Paragraph({
-            spacing: { line: lineSpacing * 240 },
-            children: [
-              new TextRun({
-                text: "Bu biçimlendirme test dokümanıdır.\nYüklediğiniz dosyalar bu formatta düzenlenecektir.",
-                font: font,
-                size: fontSize * 2,
-              }),
-            ],
-          }),
-        ],
-      }],
-    });
+      },
+      children: paragraphs,
+    }],
+  });
 
-    // Biçimlendirilmiş dosyayı oluştur ve indir
-    const blob = await Packer.toBlob(doc);
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "bicimlendirilmis_dosya.docx";
-    link.click();
-  };
+  // Dosyayı indir
+  const blob = await Packer.toBlob(doc);
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "bicimlendirilmis_" + file.name;
+  link.click();
 
-  reader.readAsArrayBuffer(file);
+  alert("✅ Dosya biçimlendirildi ve indirildi!");
 });
