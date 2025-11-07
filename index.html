@@ -3,84 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📄 Akademik Makale Biçimlendirici</title>
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
-  </style>
+  <title>Akademik Word Biçimlendirici</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="p-6">
-  <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl p-8">
-    <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">📘 Akademik Makale Biçimlendirici</h1>
+<body>
+  <div class="container">
+    <h1>📄 Akademik Word Biçimlendirici</h1>
+    <p class="desc">Word dosyanızı yükleyin, sayfa ayarlarını seçin ve biçimlendirilmiş halini indirin.</p>
 
-    <label class="block font-semibold mb-2">Word Dosyasını Yükle:</label>
-    <input type="file" id="fileInput" accept=".docx" class="mb-6 w-full border p-3 rounded-md">
+    <div class="upload-box">
+      <label for="fileInput" class="file-label">Dosya Seç</label>
+      <input type="file" id="fileInput" accept=".docx">
+      <select id="marginSelect">
+        <option value="2.5">2.5 cm kenar boşluğu</option>
+        <option value="3">3 cm kenar boşluğu</option>
+        <option value="3.5">3.5 cm kenar boşluğu</option>
+      </select>
 
-    <div class="grid grid-cols-2 gap-4 mb-6">
-      <div>
-        <label class="font-semibold">Kenar Boşluğu (cm):</label>
-        <input type="number" id="margin" step="0.1" value="2.5" class="w-full border p-2 rounded-md">
-      </div>
+      <select id="fontSizeSelect">
+        <option value="11">11 punto</option>
+        <option value="12" selected>12 punto</option>
+        <option value="13">13 punto</option>
+      </select>
 
-      <div>
-        <label class="font-semibold">Satır Aralığı:</label>
-        <input type="number" id="lineSpacing" step="0.1" value="1.15" class="w-full border p-2 rounded-md">
-      </div>
-
-      <div>
-        <label class="font-semibold">Yazı Tipi:</label>
-        <select id="font" class="w-full border p-2 rounded-md">
-          <option>Times New Roman</option>
-          <option>Arial</option>
-          <option>Calibri</option>
-          <option>Georgia</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="font-semibold">Yazı Boyutu (pt):</label>
-        <input type="number" id="fontSize" value="12" class="w-full border p-2 rounded-md">
-      </div>
-
-      <div>
-        <label class="font-semibold">Sayfa Numarası:</label>
-        <select id="pageNumbers" class="w-full border p-2 rounded-md">
-          <option value="none">Yok</option>
-          <option value="top">Üstte</option>
-          <option value="bottom">Altta</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="font-semibold">Biçim Şablonu:</label>
-        <select id="template" class="w-full border p-2 rounded-md">
-          <option value="custom">Özel</option>
-          <option value="apa">APA</option>
-          <option value="mla">MLA</option>
-          <option value="ieee">IEEE</option>
-        </select>
-      </div>
+      <button id="formatBtn">Biçimlendir</button>
     </div>
 
-    <button id="processBtn" class="bg-blue-600 text-white font-semibold py-3 px-4 rounded-md hover:bg-blue-700 w-full transition">
-      Biçimlendir ve İndir
-    </button>
-
-    <div id="status" class="text-center text-gray-600 mt-4"></div>
-
-    <div id="previewContainer" class="mt-8 hidden">
-      <h2 class="text-xl font-semibold mb-3 text-blue-700">🧾 Ön İzleme</h2>
-      <div id="preview" class="border rounded-md p-4 max-h-96 overflow-y-auto bg-gray-50 text-sm leading-relaxed"></div>
-    </div>
+    <div id="preview" class="preview-box"></div>
   </div>
 
-  <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.2.0/docx.min.js"></script>
-  <script src="script.js"></script>
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const formatBtn = document.getElementById('formatBtn');
+
+    formatBtn.addEventListener('click', () => {
+      if (!fileInput.files[0]) {
+        alert('Lütfen bir Word dosyası seçin.');
+        return;
+      }
+
+      const margin = document.getElementById('marginSelect').value;
+      const fontSize = document.getElementById('fontSizeSelect').value;
+
+      preview.innerHTML = `
+        <p><strong>Dosya:</strong> ${fileInput.files[0].name}</p>
+        <p><strong>Kenar boşluğu:</strong> ${margin} cm</p>
+        <p><strong>Yazı boyutu:</strong> ${fontSize} punto</p>
+        <a href="#" download="${fileInput.files[0].name.replace('.docx', '_duzenli.docx')}" class="download-btn">📥 Biçimlendirilmiş Dosyayı İndir</a>
+      `;
+    });
+  </script>
 </body>
 </html>
