@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Makale Biçimlendirici</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>📄 Makale Biçimlendirici</h1>
+
+  <form id="formatForm">
+    <label>Kenar boşluğu (cm):</label>
+    <input type="number" id="margin" value="2.5" step="0.1"><br><br>
+
+    <label>Yazı tipi:</label>
+    <select id="font">
+      <option>Times New Roman</option>
+      <option>Arial</option>
+      <option>Calibri</option>
+    </select><br><br>
+
+    <label>Punto:</label>
+    <input type="number" id="fontSize" value="12"><br><br>
+
+    <label>Satır aralığı:</label>
+    <select id="lineSpacing">
+      <option value="1.0">1.0</option>
+      <option value="1.15">1.15</option>
+      <option value="1.5">1.5</option>
+      <option value="2.0">2.0</option>
+    </select><br><br>
+
+    <label>Word dosyasını yükle:</label>
+    <input type="file" id="fileInput" accept=".docx"><br><br>
+
+    <button type="button" id="processBtn">Biçimlendir ve İndir</button>
+  </form>
+
+  <script src="script.js"></script>
+</body>
+</html>
