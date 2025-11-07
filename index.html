@@ -3,44 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Makale Biçimlendirici</title>
+  <title>By_Selim Akademik Makale Biçimlendirici</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <h1>📄 Makale Biçimlendirici</h1>
+<body class="p-6 bg-gray-50 min-h-screen">
+  <h1 class="text-3xl font-bold mb-4 text-center">📄 Akademik Makale Biçimlendirici</h1>
 
-  <form id="formatForm">
-    <label>Kenar boşluğu (cm):</label>
-    <input type="number" id="margin" value="2.5" step="0.1"><br><br>
+  <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-2xl p-6">
+    <label class="block font-semibold mb-2">Word Dosyasını Yükle:</label>
+    <input type="file" id="fileInput" accept=".docx" class="mb-4 w-full border p-2 rounded">
 
-    <label>Yazı tipi:</label>
-    <select id="font">
-      <option>Times New Roman</option>
-      <option>Arial</option>
-      <option>Calibri</option>
-    </select><br><br>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <label class="font-semibold">Kenar Boşluğu (cm):</label>
+        <input type="number" id="margin" step="0.1" value="2.5" class="w-full border p-2 rounded">
+      </div>
 
-    <label>Punto:</label>
-    <input type="number" id="fontSize" value="12"><br><br>
+      <div>
+        <label class="font-semibold">Satır Aralığı:</label>
+        <input type="number" id="lineSpacing" step="0.1" value="1.15" class="w-full border p-2 rounded">
+      </div>
 
-    <label>Satır aralığı:</label>
-    <select id="lineSpacing">
-      <option value="1.0">1.0</option>
-      <option value="1.15">1.15</option>
-      <option value="1.5">1.5</option>
-      <option value="2.0">2.0</option>
-    </select><br><br>
+      <div>
+        <label class="font-semibold">Yazı Tipi:</label>
+        <select id="font" class="w-full border p-2 rounded">
+          <option>Times New Roman</option>
+          <option>Arial</option>
+          <option>Calibri</option>
+          <option>Georgia</option>
+        </select>
+      </div>
 
-    <label>Word dosyasını yükle:</label>
-    <input type="file" id="fileInput" accept=".docx"><br><br>
+      <div>
+        <label class="font-semibold">Yazı Boyutu (pt):</label>
+        <input type="number" id="fontSize" value="12" class="w-full border p-2 rounded">
+      </div>
 
-    <button type="button" id="processBtn">Biçimlendir ve İndir</button>
-  </form>
+      <div>
+        <label class="font-semibold">Sayfa Numarası:</label>
+        <select id="pageNumbers" class="w-full border p-2 rounded">
+          <option value="none">Yok</option>
+          <option value="top">Üstte</option>
+          <option value="bottom">Altta</option>
+        </select>
+      </div>
 
-  <script src="script.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+      <div>
+        <label class="font-semibold">Biçim Şablonu:</label>
+        <select id="template" class="w-full border p-2 rounded">
+          <option value="custom">Özel</option>
+          <option value="apa">APA</option>
+          <option value="mla">MLA</option>
+          <option value="ieee">IEEE</option>
+        </select>
+      </div>
+    </div>
+
+    <button id="processBtn" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 w-full">Biçimlendir ve İndir</button>
+
+    <div id="previewContainer" class="mt-6 hidden">
+      <h2 class="text-xl font-semibold mb-2">🧾 Ön İzleme</h2>
+      <div id="preview" class="border rounded p-4 max-h-96 overflow-y-auto bg-gray-100 text-sm"></div>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
-
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.2.0/docx.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
